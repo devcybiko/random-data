@@ -23,8 +23,8 @@ function head(list, n = 10) {
     for (let l of list.slice(0, n)) {
         console.log(l);
     }
-    console.log(list.length);
-    console.log("");
+    // console.log(list.length);
+    // console.log("");
 }
 
 function strip(list, key) {
@@ -39,10 +39,21 @@ function sortUnique(list) {
 }
 
 function rnd(list) {
-    let n = gls.maths.random(0, list.length);
-    return list[n];
+    let n = gls.maths.random(0, list.length-1);
+    let s = list[n] || "";
+    return gls.strings.replaceAll(s, ",", " ").trim();
 }
 
+function rndNumber(lo, hi) {
+    let n = gls.maths.random(lo, hi);
+    return n.toString();
+}
+function rndPhone() {
+    let area = rndNumber(1,9)+rndNumber(0,9)+rndNumber(0,9);
+    let exch = rndNumber(1,9)+rndNumber(0,9)+rndNumber(0,9);
+    let numb = rndNumber(1,9)+rndNumber(0,9)+rndNumber(0,9)+rndNumber(0,9);
+    return `${area}-${exch}-${numb}`;
+}
 function randomAddress() {
     let fname = rnd(firstnames);
     let lname = rnd(lastnames);
@@ -50,14 +61,15 @@ function randomAddress() {
     let city = rnd(cities);
     let state = rnd(states);
     let zip = rnd(zipcodes);
+    let phone = rndPhone();
     let email=fname+"."+lname+"@gmail.com";
     let nickname = fname+"."+lname;
     let title = rnd(["Developer", "Writer", "Workshop Leader", "Friend", "Mother", "Father"]);
-    return [email, email, email, fname, lname, nickname, title, city, state, zip, "description goes here", "img/avatar.png"].join(",");
+    return [fname, lname, nickname, email, title, phone, street, city, state, zip].join(",");
 }
 
 function main() {
-    console.log(process.argv)
+    // console.log(process.argv)
     let n = process.argv[2] || 10;
 
     lastnames = files.readCSV("./data/Names_2010Census_Top1000.csv");
@@ -75,14 +87,15 @@ function main() {
     streets = sortUnique(strip(zipcodes, "PHYSICAL DELV ADDR")).map(name => allToCapital(name));
     zipcodes = sortUnique(strip(zipcodes, "PHYSICAL ZIP"));
 
-    head(lastnames);
-    head(firstnames);
-    head(streets);
-    head(cities);
-    head(states);
-    head(zipcodes);
-    head(words);
+    // head(lastnames);
+    // head(firstnames);
+    // head(streets);
+    // head(cities);
+    // head(states);
+    // head(zipcodes);
+    // head(words);
 
+    console.log("fname, lname, nickname, email, title, phone, street, city, state, zip".split(", ").join(","));
     for (i = 0; i < n; i++) {
         console.log(randomAddress());
     }
